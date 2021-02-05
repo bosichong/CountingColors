@@ -14,7 +14,7 @@ __version__ = "1.0.0"
 __all__ = [
 
     "getHtmlCode", "getBf","saveImage","createDir","createPool","closePool",
-    "t",
+    "t","getImgData"
 
 ]
 
@@ -84,6 +84,13 @@ def createDir(path):
     if(os.path.isfile(path) == False):
         os.makedirs(path, exist_ok=True)
 
+
+def getImgData(url):
+    '''
+    获得网络图片的字节流
+    '''
+    r = requests.get(url)
+    return r.content
 
 def saveImage(url,imgpath): 
     '''

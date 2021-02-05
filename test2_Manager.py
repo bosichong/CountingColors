@@ -43,16 +43,17 @@ def do_taskmaster():
     manager.start()  # 启动服务器
     print('服务器已经启动！')
     # 重新获取已经在网上注册的队列,使用队列名()方法来获得网上注册的队列名。
-    qq = manager.qq()
-    uq = manager.uq()
-    iq = manager.iq()
+    qq = manager.qq()#通信
+    uq = manager.uq()#解析URL
+    iq = manager.iq()#采集图片
 
     # 开始任务，无非就是三个任务：
 
     while True:
-        # if not qq.empty():  # 如果有消息发来
-        #     pass
-        if not iq.empty():  # 如果发来图片，我来保存
+        if not uq.empty():  # 如果有消息发来
+            time.sleep(3)
+            print("还有好多任务没有完成！")
+        elif not iq.empty():  # 如果发来图片，我来保存
             img = iq.get(timeout=3)
             print("收到信息，准备保存{}".format(img))
             # 相关操作
