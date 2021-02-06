@@ -26,7 +26,9 @@ async def downImg(p, iq):  # 协程异步下载方法
     data = [imgurl, name, ]
     data[0] = "https:" + await loop.run_in_executor(None, getImgUrl, "https:"+data[0])
     data.append(await loop.run_in_executor(None, CountingColors.getImgData, data[0]))
-    print(data[0], data[1])
+    # print(data[0], data[1])
+    iq.put(data)
+    print("{}已传输！".format(data[1]))
 
 
 def getImgUrls(l, iq):

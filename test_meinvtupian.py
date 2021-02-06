@@ -20,7 +20,10 @@ import asyncio
 ###### Sun Jan 31 18:13:13 CST 2021
 
 
-IMAGES_PATH = './chinaztu/'#存放图片的总目录
+#存放图片的总目录
+path = os.path.dirname(os.path.abspath(__file__))
+IMAGES_PATH = os.path.join(path,"chinaztu")
+#创建一个线程池
 pool = CountingColors.createPool(10)
 
 

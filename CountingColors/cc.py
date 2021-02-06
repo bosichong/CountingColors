@@ -77,12 +77,14 @@ if __name__ == '__main__':
 def createDir(path):
     '''
     若目录不存在则，创建一个目录
+    :param path: 路径地址 请传入目录的绝对地址
 
-    :param path: 路径地址
+    path = os.path.dirname(os.path.abspath(__file__))
+    IMAGES_PATH = os.path.join(path,"chinaztu")
 
     '''
-    if(os.path.isfile(path) == False):
-        os.makedirs(path, exist_ok=True)
+    if not os.path.exists(path):
+        os.makedirs(path)
 
 
 def getImgData(url):
