@@ -46,7 +46,7 @@ def getHtmlCode(url):
                              'User-Agent': get_user_agent_pc()
                          }
                          )
-        r.raise_for_status()#判断网页是否正常采集，否则抛出错误
+        r.raise_for_status()#判断请求是否正常，否则抛出错误
         r.encoding = r.apparent_encoding #分析编码并设置
         return r.text
     except:
@@ -108,14 +108,14 @@ def saveImage(url,imgpath):
         f.write(r.content)     
 
 
-def createPool(i):
+def createPool(i=10):
     '''
     创建一个线程池
 
     :param i : 线程数
     '''
     print("创建了一个有{}条线程的线程池！".format(i))
-    return ThreadPoolExecutor(10) #建立一个线程池
+    return ThreadPoolExecutor(i) #建立一个线程池
 
 def closePool(pool):
     '''

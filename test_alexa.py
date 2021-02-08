@@ -12,6 +12,7 @@ https://alexa.chinaz.com/Global/index.html
 ###### Sun Jan 31 18:13:04 CST 2021
 import CountingColors  # 引入采集助手包
 
+
 def main():
 # 因为要采集的列表不是很多，手动组装了网址列表
     urllist = [

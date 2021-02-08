@@ -16,16 +16,11 @@ from multiprocessing.managers import BaseManager  # 分布式进程模块
 from multiprocessing import freeze_support
 
 path = os.path.dirname(os.path.abspath(__file__))
-IMAGES_PATH = os.path.join(path,"chinaztu")
+IMAGES_PATH = os.path.join(path,"chinaztu/")
 
-# 创建三个queue 分别用来：通信（控制程序），url传递,图片数据传递
-signal_queue = queue.Queue()  # 最后的图片数据的q
+# 创建两个queue 分别用来：通信（控制程序），url传递,图片数据传递
 url_queue = queue.Queue()  # 图片列表URL的q
 img_queue = queue.Queue()  # 发送图片URL的Q
-
-
-def return_signal_queue():
-    return signal_queue
 
 
 def return_url_queue():
@@ -36,8 +31,6 @@ def return_img_queue():
     return img_queue
 
 # 注册一个管理器，负责管理调度网上注册的Queue队列
-
-
 class GodManager(BaseManager):
     pass
 
@@ -45,7 +38,6 @@ class GodManager(BaseManager):
 def do_taskmaster():
 
     # 把任务队列通过管理器注册到网上，这样就可以在多台机器间访问通信，做到分布式通信。
-    GodManager.register('qq', callable=return_signal_queue)
     GodManager.register('uq', callable=return_url_queue)
     GodManager.register('iq', callable=return_img_queue)
 
@@ -54,18 +46,13 @@ def do_taskmaster():
     manager.start()  # 启动服务器
     print('服务器已经启动！')
     # 重新获取已经在网上注册的队列,使用队列名()方法来获得网上注册的队列名。
-    qq = manager.qq()
     uq = manager.uq()
     iq = manager.iq()
 
     # 开始任务，无非就是三个任务：
-
     while True:
-        if not qq.empty():  # 如果有图片数据，开始保存图片
-            pass
-
-        elif not uq.empty():  # 如果有消息发来
-            time.sleep(3)
+        if not uq.empty():  # 如果有消息发来
+            time.sleep(1)
             print("还有好多任务没有完成！")
         elif not iq.empty():  # 如果发来图片，我来保存
             data = iq.get(timeout=3)
@@ -77,7 +64,7 @@ def do_taskmaster():
                 f.write(data[2])
             print("{}已经保存到{}".format(data[1],imgpath))
         else:
-            time.sleep(3)
+            time.sleep(1)
             print("无聊的等待，他们干活的效率可真慢啊！")
 
 

@@ -28,7 +28,7 @@ async def downImg(p, iq):  # 协程异步下载方法
     data.append(await loop.run_in_executor(None, CountingColors.getImgData, data[0]))
     # print(data[0], data[1])
     iq.put(data)
-    print("{}已传输！".format(data[1]))
+    print("{}已传输@@@@@@@@@@".format(data[1]))
 
 
 def getImgUrls(l, iq):
@@ -59,10 +59,8 @@ class ConsumerMagager(BaseManager):
 
 def main():
     # 获取网络上的Queue 消费者，需要获取任务，计算后发送任务。
-    ConsumerMagager.register('qq')
     ConsumerMagager.register('uq')
     ConsumerMagager.register('iq')
-
     m = ConsumerMagager(address=('192.168.0.88', 5678), authkey=b'2vv.net')
     m.connect()  # 连接服务器
     print("已连接到服务器")

@@ -25,7 +25,7 @@ import asyncio
 path = os.path.dirname(os.path.abspath(__file__))
 IMAGES_PATH = os.path.join(path,"chinaztu/")
 # 创建一个线程池
-pool = CountingColors.createPool(10)
+# pool = CountingColors.createPool(10)
 
 
 
@@ -37,22 +37,24 @@ def getImgUrl(url):
     return url.get('href')
 
 
-# async def downImg(url):#协程异步下载方法
-def downImg(url):#常规下载方法
+async def downImg(url):#协程异步下载方法
+# def downImg(url):#常规下载方法
     '''下载每一个页面上的图片'''
-    # loop = asyncio.get_event_loop()
+    loop = asyncio.get_event_loop()
     a = "https:{}".format(url.get("href"))
-    imgurl = "https:"+getImgUrl(a)# 常规获取图片链接地址
-    # imgurl =  "https:" + await loop.run_in_executor(None,getImgUrl,a)#asyncio获取图片链接地址
+    # imgurl = "https:"+getImgUrl(a)# 常规获取图片链接地址
+    imgurl =  "https:" + await loop.run_in_executor(None,getImgUrl,a)#asyncio获取图片链接地址
     # print(imgurl)
     imgname = re.search(r'[^/]+.jpg',imgurl).group()#图片名称
     imgpath = IMAGES_PATH+imgname
-    print(imgpath)
-    # 单线程下载 
-    CountingColors.saveImage(imgurl,imgpath) 
+    # print(imgpath)
+    # 单线程下载 序运行时间:41.49秒
+    # CountingColors.saveImage(imgurl,imgpath) 
+    # #多线程采集图片程序运行时间:18.90秒
+    # pool.submit(CountingColors.saveImage,imgurl,imgpath)
     # asyncio 协程异步下载 程序运行时间:5.60秒
-    # await loop.run_in_executor(None,CountingColors.saveImage,imgurl,imgpath)
-    # print("{}保存成功".format(imgpath))
+    await loop.run_in_executor(None,CountingColors.saveImage,imgurl,imgpath)
+    print("{}保存成功".format(imgpath))
 
 def getImgUrls(url):
     '''
@@ -66,16 +68,12 @@ def getImgUrls(url):
     pageslist = pageshtml.find_all(name="a")
 
     # 常规的单线程 多线程保存图片 
-    for url in pageslist:
-        # 单线程下载 序运行时间:41.49秒
-        # downImg(url) 
-        # 多线程程序采集时间:6.18秒
-        pool.submit(downImg,url)
-        
+    # for url in pageslist:
+    #     downImg(url) 
     ####asyncio 异步下载图片
-    # tasks = [downImg(url) for url in pageslist ]
-    # loop = asyncio.get_event_loop()
-    # loop.run_until_complete(asyncio.wait(tasks))
+    tasks = [downImg(url) for url in pageslist ]
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(asyncio.wait(tasks))
 
 
         
@@ -102,11 +100,11 @@ def main():
     getImgUrls("https://sc.chinaz.com/tupian/meinvtupian_2.html")
     
     
-    # #连续下载3页图片测试！
+    # # #连续下载3页图片测试！
     # for page in getPageList():
     #     getImgUrls(page)
         
-    CountingColors.closePool(pool)
+    # CountingColors.closePool(pool)
     
 
 

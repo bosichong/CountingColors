@@ -11,6 +11,7 @@ http://data.10jqka.com.cn/market/longhu/
 '''
 
 import CountingColors
+
 def main():
     url = "http://data.10jqka.com.cn/market/longhu/"#需要采集的网址
     bf = CountingColors.getBf(url)#获取bs4对象
@@ -23,6 +24,7 @@ def main():
             if k != 1 :
                 print("{} ".format(td.text),end="")
             else:
+                #如果有title缺失的情况下
                 print("{} ".format(td.a["title"]),end="")
             k+=1
         print("")

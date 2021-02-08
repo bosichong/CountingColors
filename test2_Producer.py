@@ -11,11 +11,6 @@ import time
 
 from multiprocessing.managers import BaseManager
 
-import sys
- 
-sys.setrecursionlimit(1000000) #例如这里设置为一百万
-
-
 
 def getPageList(s=2,e=4):
     '''
@@ -31,21 +26,13 @@ def getPageList(s=2,e=4):
     return pages
 
 
-
-
-
-    
-
-
 # 注册一个管理器，负责管理调度网上注册的Queue队列
 class ProducerMagager(BaseManager):
     pass
 
 def main():
     #获取网络上的Queue 消费者，需要获取任务，计算后发送任务。
-    ProducerMagager.register('qq')
     ProducerMagager.register('uq')
-
     pm = ProducerMagager(address=('192.168.0.88',5678),authkey=b'2vv.net')
     pm.connect()#连接服务器
     print("已连接到服务器")
